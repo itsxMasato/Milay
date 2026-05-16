@@ -177,7 +177,7 @@ export default function ServicesAndAppointments() {
             <form onSubmit={submitBooking}>
               {!user && (
                 <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className="grid-2" style={{ gap: '16px' }}>
                     <div className="field">
                       <label>Nombre</label>
                       <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required placeholder="Ej. Camila" />
@@ -191,7 +191,7 @@ export default function ServicesAndAppointments() {
                     <label>Correo Electrónico</label>
                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="tu@correo.com" />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className="grid-2" style={{ gap: '16px' }}>
                     <div className="field">
                       <label>Fecha de Nacimiento</label>
                       <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
@@ -204,7 +204,7 @@ export default function ServicesAndAppointments() {
                 </>
               )}
               
-              <div style={{ display: 'grid', gridTemplateColumns: user ? '1fr 1fr' : '1fr', gap: '16px', marginTop: user ? '0' : '16px' }}>
+              <div className={user ? "grid-2" : ""} style={{ gap: '16px', marginTop: user ? '0' : '16px' }}>
                 <div className="field">
                   <label>Teléfono (WhatsApp)</label>
                   <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required placeholder="+504..." />

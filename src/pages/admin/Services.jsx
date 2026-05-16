@@ -265,7 +265,7 @@ export default function Services() {
                 <label>Nombre del Servicio</label>
                 <input type="text" value={newService.name} onChange={(e) => setNewService({ ...newService, name: e.target.value })} required />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="grid-2" style={{ gap: '16px' }}>
                 <div className="field">
                   <label>Precio (L)</label>
                   <input type="number" value={newService.price} onChange={(e) => setNewService({ ...newService, price: e.target.value })} required />

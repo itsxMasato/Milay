@@ -148,7 +148,7 @@ export default function Appointments() {
 
   return (
     <>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '24px' }}>
+      <div className="layout-split">
         {/* LEFT: Appointments */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>

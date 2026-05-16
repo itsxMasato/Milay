@@ -103,7 +103,7 @@ export default function Dashboard() {
       </div>
 
       {/* Two columns */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }} className="animate-up delay-2">
+      <div className="grid-2 animate-up delay-2" style={{ gap: '20px' }}>
         {/* Recent Appointments */}
         <div className="card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>

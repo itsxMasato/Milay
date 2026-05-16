@@ -237,6 +237,7 @@ export default function Users() {
       {/* Table */}
       <div className="card animate-up delay-2" style={{ padding: 0, overflow: 'hidden' }}>
         <div style={{ overflowX: 'auto' }}>
+        <div className="table-responsive">
           <table className="data-table">
             <thead>
               <tr>
@@ -288,6 +289,7 @@ export default function Users() {
               ))}
             </tbody>
           </table>
+        </div>
           {filteredUsers.length === 0 && (
             <div style={{ padding: '32px', textAlign: 'center', color: 'var(--smoke)', fontSize: '13px' }}>No se encontraron resultados para los filtros seleccionados.</div>
           )}
@@ -300,7 +302,7 @@ export default function Users() {
           <div className="card" style={{ width: '100%', maxWidth: '500px', margin: '0 20px', animation: 'fadeUp 0.3s forwards', maxHeight: '90vh', overflowY: 'auto' }}>
             <h3 className="font-display" style={{ fontSize: '20px', color: 'var(--deep)', marginBottom: '24px', fontWeight: 500 }}>{editMode ? 'Editar Cliente' : 'Registrar Cliente'}</h3>
             <form onSubmit={handleSave}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="grid-2" style={{ gap: '16px' }}>
                 <div className="field">
                   <label>Nombre</label>
                   <input type="text" value={newUser.firstName} onChange={(e) => setNewUser({ ...newUser, firstName: e.target.value })} required />
@@ -310,7 +312,7 @@ export default function Users() {
                   <input type="text" value={newUser.lastName} onChange={(e) => setNewUser({ ...newUser, lastName: e.target.value })} required />
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="grid-2" style={{ gap: '16px' }}>
                 <div className="field">
                   <label>Fecha de Nacimiento</label>
                   <input type="date" value={newUser.dob} onChange={(e) => setNewUser({ ...newUser, dob: e.target.value })} required />

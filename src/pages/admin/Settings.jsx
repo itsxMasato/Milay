@@ -110,7 +110,7 @@ export default function Settings() {
 
   return (
     <>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '24px' }}>
+      <div className="layout-split">
         {/* Left */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Daily availability */}

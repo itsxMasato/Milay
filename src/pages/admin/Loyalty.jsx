@@ -135,7 +135,7 @@ export default function Loyalty() {
             <p className="font-display" style={{ fontSize: '36px', color: 'white', fontWeight: 400 }}>+24% Retención</p>
             <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginTop: '8px' }}>54 clientes regresaron gracias a tus eventos de fidelidad.</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', textAlign: 'center' }}>
+          <div className="grid-2" style={{ gap: '24px', textAlign: 'center' }}>
             <div>
               <p className="font-display" style={{ fontSize: '28px', color: 'white', fontWeight: 400 }}>42</p>
               <p style={{ fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Canjes activos</p>
@@ -148,7 +148,7 @@ export default function Loyalty() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {/* Events list */}
         <div>
           {/* Filters */}
