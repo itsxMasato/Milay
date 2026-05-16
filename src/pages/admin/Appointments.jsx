@@ -182,7 +182,7 @@ export default function Appointments() {
               filteredAppointments.map((appt, idx) => (
                 <div key={appt.id} className={`appt-card animate-up delay-${Math.min(idx, 3)}`} style={{ opacity: appt.status === 'rejected' ? 0.6 : 1 }}>
                   <div 
-                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px', cursor: 'pointer', paddingBottom: appt.status === 'pending' ? '12px' : '0', borderBottom: appt.status === 'pending' ? '1px solid var(--mist)' : 'none' }}
+                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '12px', cursor: 'pointer', paddingBottom: appt.status === 'pending' ? '12px' : '0', borderBottom: appt.status === 'pending' ? '1px solid var(--mist)' : 'none' }}
                     onClick={() => setViewApptModal({ isOpen: true, appt })}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -387,12 +387,12 @@ export default function Appointments() {
             <p style={{ fontSize: '13px', color: 'var(--smoke)', marginBottom: '24px' }}>Selecciona la nueva fecha y hora para <strong>{rescheduleModal.appt.clientName}</strong>.</p>
             
             <form onSubmit={executeReschedule}>
-              <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-                <div className="field" style={{ flex: 1 }}>
+              <div className="grid-2" style={{ gap: '16px', marginBottom: '24px' }}>
+                <div className="field">
                   <label>Nueva Fecha</label>
                   <input type="date" value={rescheduleDate} onChange={e => setRescheduleDate(e.target.value)} required />
                 </div>
-                <div className="field" style={{ flex: 1 }}>
+                <div className="field">
                   <label>Nueva Hora</label>
                   <input type="time" value={rescheduleTime} onChange={e => setRescheduleTime(e.target.value)} required />
                 </div>
