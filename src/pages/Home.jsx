@@ -8,7 +8,7 @@ export default function Home() {
       <section className="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center mb-24">
         <div className="md:col-span-5 order-2 md:order-1">
           <p className="font-label-sm text-label-sm text-primary mb-2 uppercase tracking-widest animate-fade-up">Bienvenida a Milay Beauty</p>
-          <h1 className="font-display-lg text-display-lg md:text-[64px] text-on-surface mb-6 leading-tight animate-fade-up" style={{animationDelay: '0.1s'}}>Tu ritual de <br/>belleza elevado.</h1>
+          <h1 className="font-display-lg text-[40px] md:text-[64px] text-on-surface mb-6 leading-tight animate-fade-up" style={{animationDelay: '0.1s'}}>Tu ritual de <br/>belleza elevado.</h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-md animate-fade-up" style={{animationDelay: '0.2s'}}>Descubre un santuario diseñado para tu bienestar, donde la alta cosmética se encuentra con el cuidado más cálido y profesional.</p>
           <div className="flex flex-col sm:flex-row gap-4 animate-fade-up" style={{animationDelay: '0.3s'}}>
             <Link to="/appointments" className="bg-on-background text-center text-on-primary px-8 py-4 rounded-lg font-label-sm text-label-sm active:scale-95 transition-transform duration-200">
@@ -34,7 +34,7 @@ export default function Home() {
       <section className="mb-24">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <h2 className="font-display-lg text-headline-lg text-on-surface">Servicios Principales</h2>
+            <h2 className="font-display-lg text-[28px] md:text-headline-lg text-on-surface">Servicios Principales</h2>
             <p className="font-body-md text-body-md text-on-surface-variant">Explora nuestras experiencias de cuidado personal.</p>
           </div>
           <Link to="/services" className="hidden md:flex items-center gap-2 text-primary font-label-sm text-label-sm border-b border-primary pb-1">
@@ -85,7 +85,7 @@ export default function Home() {
       <section className="bg-primary-container/30 rounded-lg p-8 md:p-16 flex flex-col md:flex-row items-center gap-12">
         <div className="flex-1">
           <span className="px-4 py-1 bg-primary-container text-on-primary-container rounded-full font-label-sm text-[10px] mb-4 inline-block uppercase">Próxima Disponibilidad: Hoy</span>
-          <h2 className="font-display-lg text-headline-lg md:text-display-lg text-on-surface mb-4">Agenda tu momento de bienestar</h2>
+          <h2 className="font-display-lg text-[32px] md:text-display-lg text-on-surface mb-4 leading-tight">Agenda tu momento de bienestar</h2>
           <p className="font-body-md text-body-md text-on-surface-variant max-w-lg mb-8">Selecciona la fecha y hora que mejor se adapte a tu ritmo. Nos encargaremos del resto para que tu experiencia sea inolvidable.</p>
           <div className="flex gap-4">
             <Link to="/appointments" className="bg-on-background inline-block text-on-primary px-10 py-5 rounded-lg font-label-sm text-label-sm active:scale-95 transition-transform duration-200">
