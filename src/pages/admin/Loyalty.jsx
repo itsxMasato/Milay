@@ -98,8 +98,8 @@ export default function Loyalty() {
         await updateDoc(doc(db, 'loyaltyClients', currentClientId), payload);
         setClients((prev) => prev.map((client) => (client.id === currentClientId ? { ...client, ...payload } : client)));
       } else {
-        const addedRef = await addDoc(collection(db, 'loyaltyClients'), payload);
-        setClients((prev) => [{ id: addedRef.id, ...payload }, ...prev]);
+        const addedRef = await addDoc(collection(db, 'loyaltyClients'), { ...payload, createdAt: serverTimestamp() });
+        setClients((prev) => [{ id: addedRef.id, ...payload, createdAt: new Date() }, ...prev]);
       }
       setIsModalOpen(false);
     } catch (error) {
