@@ -21,6 +21,7 @@ export default function Loyalty() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('Todos');
+  const [selloAction, setSelloAction] = useState({ isOpen: false, clientId: null, action: '' });
 
   useEffect(() => {
     fetchClients();
@@ -42,7 +43,7 @@ export default function Loyalty() {
   const openCreateModal = () => {
     setEditMode(false);
     setCurrentClientId(null);
-    setClientForm({ nombre: '', tel: '', email: '', bday: '', code: generateCode(), sellos: 0, visits: 0 });
+    setClientForm({ nombre: '', tel: '', email: '', bday: '', code: generateCode(), sellos: 0 });
     setIsModalOpen(true);
   };
 
@@ -56,7 +57,6 @@ export default function Loyalty() {
       bday: client.bday || '',
       code: client.code || generateCode(),
       sellos: client.sellos || 0,
-      visits: client.visits || 0,
     });
     setIsModalOpen(true);
   };
@@ -90,7 +90,6 @@ export default function Loyalty() {
       bday: clientForm.bday,
       code: clientForm.code.trim() || generateCode(),
       sellos: Number(clientForm.sellos) || 0,
-      visits: Number(clientForm.visits) || 0,
       updatedAt: new Date(),
     };
 
@@ -122,11 +121,36 @@ export default function Loyalty() {
     }
   };
 
-  const markVisit = async (client) => {
+  const markSello = async (client) => {
+    const currentSellos = Number(client.sellos) || 0;
+    const newSellos = currentSellos + 1;
+    
     const updated = {
       ...client,
-      sellos: (Number(client.sellos) || 0) + 1,
-      visits: (Number(client.visits) || 0) + 1,
+      sellos: newSellos,
+      updatedAt: new Date(),
+    };
+
+    try {
+      await updateDoc(doc(db, 'loyaltyClients', client.id), updated);
+      setClients((prev) => prev.map((item) => (item.id === client.id ? updated : item)));
+      
+      // Si llegó a 10, mostrar opción de reiniciar
+      if (newSellos === 10) {
+        setSelloAction({ isOpen: true, clientId: client.id, action: 'fullCard' });
+      }
+    } catch (error) {
+      console.error('Error marcando sello:', error);
+    }
+  };
+
+  const decreaseSello = async (client) => {
+    const currentSellos = Number(client.sellos) || 0;
+    if (currentSellos <= 0) return;
+
+    const updated = {
+      ...client,
+      sellos: currentSellos - 1,
       updatedAt: new Date(),
     };
 
@@ -134,7 +158,26 @@ export default function Loyalty() {
       await updateDoc(doc(db, 'loyaltyClients', client.id), updated);
       setClients((prev) => prev.map((item) => (item.id === client.id ? updated : item)));
     } catch (error) {
-      console.error('Error marcando visita:', error);
+      console.error('Error disminuyendo sello:', error);
+    }
+  };
+
+  const resetCard = async (clientId) => {
+    const client = clients.find((c) => c.id === clientId);
+    if (!client) return;
+
+    const updated = {
+      ...client,
+      sellos: 0,
+      updatedAt: new Date(),
+    };
+
+    try {
+      await updateDoc(doc(db, 'loyaltyClients', clientId), updated);
+      setClients((prev) => prev.map((item) => (item.id === clientId ? updated : item)));
+      setSelloAction({ isOpen: false, clientId: null, action: '' });
+    } catch (error) {
+      console.error('Error reiniciando tarjeta:', error);
     }
   };
 
@@ -157,7 +200,7 @@ export default function Loyalty() {
   });
 
   const totalClients = clients.length;
-  const totalVisits = clients.reduce((sum, client) => sum + (Number(client.visits) || 0), 0);
+  const totalSellos = clients.reduce((sum, client) => sum + (Number(client.sellos) || 0), 0);
   const clientsWithLoyalty = clients.filter((client) => client.code).length;
 
   return (
@@ -179,9 +222,9 @@ export default function Loyalty() {
           <p className="stat-sub"><span className="material-symbols-outlined" style={{ fontSize: '14px' }}>group</span> Registrados</p>
         </div>
         <div className="stat-card">
-          <p className="stat-label">Visitas marcadas</p>
-          <p className="stat-value">{totalVisits}</p>
-          <p className="stat-sub"><span className="material-symbols-outlined" style={{ fontSize: '14px' }}>calendar_month</span> Totales</p>
+          <p className="stat-label">Sellos marcados</p>
+          <p className="stat-value">{totalSellos}</p>
+          <p className="stat-sub"><span className="material-symbols-outlined" style={{ fontSize: '14px' }}>verified</span> Totales</p>
         </div>
         <div className="stat-card">
           <p className="stat-label">Tarjetas activas</p>
@@ -233,16 +276,16 @@ export default function Loyalty() {
                 <h4 className="font-display" style={{ fontSize: '18px', color: 'var(--deep)', marginBottom: '8px', fontWeight: 500 }}>{client.nombre}</h4>
                 <p style={{ fontSize: '13px', color: 'var(--smoke)' }}>{client.email || 'Sin email registrado'}</p>
                 <p style={{ fontSize: '13px', color: 'var(--smoke)', marginTop: '6px' }}><strong>Tel:</strong> {client.tel}</p>
-                <p style={{ fontSize: '13px', color: 'var(--smoke)', marginTop: '6px' }}><strong>Visitas:</strong> {Number(client.visits) || 0}</p>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', alignItems: 'center', marginTop: '16px' }}>
                 <div>
                   <p className="stat-label">Sellos</p>
-                  <p className="stat-value">{Number(client.sellos) || 0}</p>
+                  <p className="stat-value">{Number(client.sellos) || 0}/10</p>
                 </div>
-                <button className="btn btn-primary" style={{ minWidth: '140px' }} onClick={() => markVisit(client)}>
-                  Marcar visita
-                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button className="btn btn-secondary" onClick={() => decreaseSello(client)} style={{ minWidth: '40px', padding: '8px' }}>−</button>
+                  <button className="btn btn-primary" onClick={() => markSello(client)}>+</button>
+                </div>
               </div>
               <div style={{ display: 'flex', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
                 <button className="btn-secondary" style={{ flex: 1 }} onClick={() => openEditModal(client)}>Editar</button>
@@ -280,15 +323,9 @@ export default function Loyalty() {
                 <label>Código</label>
                 <input type="text" value={clientForm.code} onChange={(e) => handleFormChange('code', e.target.value)} />
               </div>
-              <div className="grid-2" style={{ gap: '16px' }}>
-                <div className="field">
-                  <label>Sellos</label>
-                  <input type="number" min="0" value={clientForm.sellos} onChange={(e) => handleFormChange('sellos', e.target.value)} />
-                </div>
-                <div className="field">
-                  <label>Visitas</label>
-                  <input type="number" min="0" value={clientForm.visits} onChange={(e) => handleFormChange('visits', e.target.value)} />
-                </div>
+              <div className="field">
+                <label>Sellos</label>
+                <input type="number" min="0" value={clientForm.sellos} onChange={(e) => handleFormChange('sellos', e.target.value)} />
               </div>
               <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
                 <button type="button" className="btn-secondary" style={{ flex: 1 }} onClick={() => setIsModalOpen(false)}>Cancelar</button>
@@ -326,6 +363,22 @@ export default function Loyalty() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <button className="btn-primary" style={{ width: '100%', background: '#ba1a1a' }} onClick={executeDelete}>Eliminar</button>
               <button className="btn-secondary" style={{ width: '100%' }} onClick={() => setIsDeleteModalOpen(false)}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selloAction.isOpen && selloAction.action === 'fullCard' && (
+        <div className="overlay open" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 120 }}>
+          <div className="card" style={{ width: '100%', maxWidth: '360px', margin: '0 20px', textAlign: 'center', animation: 'fadeUp 0.3s forwards' }}>
+            <div style={{ width: '60px', height: '60px', background: '#e8f5e9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '30px', color: '#2e7d32' }}>celebration</span>
+            </div>
+            <h3 className="font-display" style={{ fontSize: '20px', color: 'var(--deep)', marginBottom: '12px' }}>¡Tarjeta completada!</h3>
+            <p style={{ fontSize: '13px', color: 'var(--smoke)', marginBottom: '24px' }}>La tarjeta ha alcanzado los 10 sellos. ¿Deseas reiniciar la tarjeta?</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button className="btn-primary" style={{ width: '100%' }} onClick={() => resetCard(selloAction.clientId)}>Reiniciar tarjeta</button>
+              <button className="btn-secondary" style={{ width: '100%' }} onClick={() => setSelloAction({ isOpen: false, clientId: null, action: '' })}>Cerrar</button>
             </div>
           </div>
         </div>
