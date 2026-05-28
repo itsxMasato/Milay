@@ -20,7 +20,6 @@ export default function AdminLayout() {
   const navItems = [
     { name: 'Inicio', path: '/admin', icon: 'home' },
     { name: 'Servicios', path: '/admin/services', icon: 'spa' },
-    { name: 'Agenda', path: '/admin/appointments', icon: 'calendar_month' },
     { name: 'Usuarios', path: '/admin/users', icon: 'group' },
     { name: 'Fidelidad', path: '/admin/loyalty', icon: 'card_membership' },
     { name: 'Configuración', path: '/admin/settings', icon: 'settings' }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import { LogOut, Calendar, Home, Phone, Settings, Users, Scissors, Gift, Menu, X } from 'lucide-react';
+import { LogOut, Home, Phone, Settings, Users, Scissors, Gift, Menu, X } from 'lucide-react';
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
@@ -23,7 +23,6 @@ export const Navbar = () => {
       ]
     : [
         { path: '/home', label: 'Inicio', icon: <Home size={18}/> },
-        { path: '/appointments', label: 'Citas', icon: <Calendar size={18}/> },
         { path: '/contact', label: 'Contacto', icon: <Phone size={18}/> },
       ];
 

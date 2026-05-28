@@ -23,7 +23,6 @@ export const UserLayout = ({ children }) => {
           <nav className="hidden md:flex gap-8 items-center">
             <Link to="/home" className={`font-headline-md text-headline-md transition-opacity duration-300 ${location.pathname === '/home' ? 'text-primary font-bold' : 'text-on-surface-variant hover:opacity-80'}`}>Inicio</Link>
             <Link to="/services" className={`font-headline-md text-headline-md transition-opacity duration-300 ${location.pathname === '/services' ? 'text-primary font-bold' : 'text-on-surface-variant hover:opacity-80'}`}>Servicios</Link>
-            <Link to="/appointments" className={`font-headline-md text-headline-md transition-opacity duration-300 ${location.pathname === '/appointments' ? 'text-primary font-bold' : 'text-on-surface-variant hover:opacity-80'}`}>Reservar</Link>
             <Link to="/contact" className={`font-headline-md text-headline-md transition-opacity duration-300 ${location.pathname === '/contact' ? 'text-primary font-bold' : 'text-on-surface-variant hover:opacity-80'}`}>Contacto</Link>
           </nav>
           <div className="flex gap-4 items-center">
@@ -60,7 +59,6 @@ export const UserLayout = ({ children }) => {
             <h4 className="font-label-sm text-label-sm mb-6 uppercase tracking-wider">Explorar</h4>
             <ul className="flex flex-col gap-3 font-body-md text-body-md text-on-surface-variant">
               <li><Link className="hover:text-primary" to="/services">Servicios</Link></li>
-              <li><Link className="hover:text-primary" to="/appointments">Reservas</Link></li>
               <li><Link className="hover:text-primary" to="/home">Nuestra Historia</Link></li>
             </ul>
           </div>
@@ -85,10 +83,6 @@ export const UserLayout = ({ children }) => {
           <Link to="/services" className={`flex flex-col items-center justify-center transition-transform duration-200 active:scale-90 ${location.pathname === '/services' ? 'text-on-background font-bold' : 'text-on-surface-variant opacity-60'}`}>
             <span className="material-symbols-outlined">spa</span>
             <span className="font-label-sm text-label-sm">Servicios</span>
-          </Link>
-          <Link to="/appointments" className={`flex flex-col items-center justify-center transition-transform duration-200 active:scale-90 ${location.pathname === '/appointments' ? 'text-primary' : 'text-on-surface-variant opacity-60'}`}>
-            <span className="material-symbols-outlined text-[32px]" style={{fontVariationSettings: "'FILL' 1"}}>add_circle</span>
-            <span className="font-label-sm text-label-sm">Reservar</span>
           </Link>
           <Link to="/contact" className={`flex flex-col items-center justify-center transition-transform duration-200 active:scale-90 ${location.pathname === '/contact' ? 'text-on-background font-bold' : 'text-on-surface-variant opacity-60'}`}>
             <span className="material-symbols-outlined">chat</span>

@@ -1,29 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
-import { useAuth } from '../components/AuthContext';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 
 export default function ServicesAndAppointments() {
   const [services, setServices] = useState([]);
+  const [pageData, setPageData] = useState({
+    heroTag: '',
+    heroTitle: '',
+    heroSubTitle: '',
+    heroDescription: '',
+    heroPrimaryCta: '',
+    heroSecondaryCta: '',
+    socialWhatsapp: '',
+  });
   const [loading, setLoading] = useState(true);
-  const [selectedService, setSelectedService] = useState(null);
-  const { user } = useAuth();
-  
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [dob, setDob] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
-  const [date, setDate] = useState('');
-  
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterCategory, setFilterCategory] = useState('Todos');
-  const [alertModal, setAlertModal] = useState({ isOpen: false, message: '', type: 'error' });
 
   useEffect(() => {
     fetchServices();
+    fetchPageData();
   }, []);
+
+  const fetchPageData = async () => {
+    try {
+      const homeRef = doc(db, 'site', 'homepage');
+      const homeSnap = await getDoc(homeRef);
+      if (homeSnap.exists()) {
+        setPageData((prev) => ({ ...prev, ...homeSnap.data() }));
+      }
+    } catch (e) {
+      setPageData((prev) => ({ ...prev }));
+    }
+  };
 
   const fetchServices = async () => {
     try {
@@ -37,75 +45,23 @@ export default function ServicesAndAppointments() {
     }
   };
 
-  const handleBook = (service) => {
-    setSelectedService(service);
-    setIsModalOpen(true);
-  };
+  const categories = ['Todos', ...Array.from(new Set(services.map((s) => s.category)))];
 
-  const submitBooking = async (e) => {
-    e.preventDefault();
-    
-    const fName = user ? user.firstName : firstName;
-    const lName = user ? user.lastName : lastName;
-    const mail = user ? user.email : email;
-    const dateOfBirth = user ? user.dob : dob;
-    const addr = user ? user.address : address;
-
-    if (!fName || !lName || !date || !phone || !mail) {
-      setAlertModal({ isOpen: true, message: 'Completa todos los campos obligatorios para agendar tu cita.', type: 'error' });
-      return;
-    }
-
-    const newAppt = {
-      firstName: fName,
-      lastName: lName,
-      clientName: `${fName} ${lName}`,
-      initials: `${fName?.charAt(0) || ''}${lName?.charAt(0) || ''}`.toUpperCase(),
-      email: mail,
-      dob: dateOfBirth || '',
-      address: addr || '',
-      phone,
-      service: selectedService.name,
-      date,
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    };
-    if (user) {
-      newAppt.userId = user.uid;
-    }
-
-    try {
-      await addDoc(collection(db, 'appointments'), newAppt);
-      setAlertModal({ isOpen: true, message: '¡Cita solicitada exitosamente! Te contactaremos por WhatsApp para confirmarla.', type: 'success' });
-      setIsModalOpen(false);
-      setFirstName('');
-      setLastName('');
-      setDob('');
-      setEmail('');
-      setAddress('');
-      setPhone('');
-      setDate('');
-    } catch (error) {
-      console.error("Error booking:", error);
-      setAlertModal({ isOpen: true, message: 'Ocurrió un error al agendar la cita. Intenta de nuevo más tarde.', type: 'error' });
-    }
-  };
-
-  const categories = ['Todos', 'Cabello', 'Uñas', 'Faciales', 'Pedicura'];
+  const renderServiceDescription = (service) => service.description || service.desc || '';
 
   return (
     <div style={{ background: 'var(--cream)', minHeight: '100vh', padding: '0 0 60px' }}>
       {/* HERO */}
       <div className="login-left" style={{ padding: '60px 40px', textAlign: 'center', alignItems: 'center', minHeight: '40vh', borderRadius: '0 0 40px 40px' }}>
         <p style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--rose)', marginBottom: '16px' }}>
-          Estética · Cuidado · Armonía
+          {pageData.heroTag}
         </p>
         <h1 className="font-display" style={{ fontSize: '56px', color: 'white', lineHeight: 1.1, fontWeight: 400, marginBottom: '20px' }}>
-          Milay<br/><em>Beauty</em>
+          {pageData.heroTitle}<br/><em>{pageData.heroSubTitle}</em>
         </h1>
         <div style={{ width: '40px', height: '1px', background: 'var(--rose)', margin: '0 auto 24px' }}></div>
         <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '15px', lineHeight: 1.7, maxWidth: '400px', margin: '0 auto' }}>
-          Explora nuestros servicios exclusivos y agenda tu cita en nuestro santuario de belleza.
+          {pageData.heroDescription}
         </p>
       </div>
 
@@ -147,10 +103,27 @@ export default function ServicesAndAppointments() {
                           </span>
                         )}
                         <h4 className="font-display" style={{ fontSize: '18px', color: 'var(--deep)', marginBottom: '6px', fontWeight: 500 }}>{service.name}</h4>
-                        <p style={{ fontSize: '13px', color: 'var(--smoke)', marginBottom: '20px', lineHeight: 1.5 }}>{service.description}</p>
+                        <p style={{ fontSize: '13px', color: 'var(--smoke)', marginBottom: '20px', lineHeight: 1.5 }}>{renderServiceDescription(service)}</p>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
-                          <p style={{ fontSize: '18px', fontWeight: 700, color: 'var(--dusty)' }}>L{service.price}</p>
-                          <button className="btn-secondary" style={{ fontSize: '10px', padding: '8px 16px' }} onClick={() => handleBook(service)}>Reservar</button>
+                          <p style={{ fontSize: '18px', fontWeight: 700, color: 'var(--dusty)' }}>{service.price ? `L${service.price}` : ''}</p>
+                          {pageData.socialWhatsapp ? (
+                            <a
+                              href={`${pageData.socialWhatsapp}?text=${encodeURIComponent(`Hola, quiero información sobre el servicio ${service.name}.`)}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="btn btn-primary"
+                              style={{ whiteSpace: 'nowrap', fontSize: '10px', padding: '8px 16px' }}
+                            >
+                              WhatsApp
+                            </a>
+                          ) : (
+                            <span
+                              className="btn btn-primary"
+                              style={{ whiteSpace: 'nowrap', fontSize: '10px', padding: '8px 16px', opacity: 0.6, cursor: 'not-allowed' }}
+                            >
+                              WhatsApp
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -162,85 +135,6 @@ export default function ServicesAndAppointments() {
         )}
       </div>
 
-      {/* BOOKING MODAL */}
-      {isModalOpen && selectedService && (
-        <div className="overlay open" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 110 }}>
-          <div className="card" style={{ width: '100%', maxWidth: '500px', margin: '0 20px', animation: 'fadeUp 0.3s forwards', maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
-              <div>
-                <p style={{ fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--rose)', marginBottom: '4px' }}>Solicitar Cita</p>
-                <h3 className="font-display" style={{ fontSize: '20px', color: 'var(--deep)', fontWeight: 500 }}>{selectedService.name}</h3>
-              </div>
-              <p style={{ fontSize: '16px', fontWeight: 700, color: 'var(--dusty)' }}>L{selectedService.price}</p>
-            </div>
-            
-            <form onSubmit={submitBooking}>
-              {!user && (
-                <>
-                  <div className="grid-2" style={{ gap: '16px' }}>
-                    <div className="field">
-                      <label>Nombre</label>
-                      <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required placeholder="Ej. Camila" />
-                    </div>
-                    <div className="field">
-                      <label>Apellido</label>
-                      <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required placeholder="Ej. Romero" />
-                    </div>
-                  </div>
-                  <div className="field">
-                    <label>Correo Electrónico</label>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="tu@correo.com" />
-                  </div>
-                  <div className="grid-2" style={{ gap: '16px' }}>
-                    <div className="field">
-                      <label>Fecha de Nacimiento</label>
-                      <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
-                    </div>
-                    <div className="field">
-                      <label>Dirección</label>
-                      <textarea rows="1" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Colonia..."></textarea>
-                    </div>
-                  </div>
-                </>
-              )}
-              
-              <div className={user ? "grid-2" : ""} style={{ gap: '16px', marginTop: user ? '0' : '16px' }}>
-                <div className="field">
-                  <label>Teléfono (WhatsApp)</label>
-                  <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required placeholder="+504..." />
-                </div>
-                <div className="field">
-                  <label>Fecha Deseada para Cita</label>
-                  <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-                </div>
-              </div>
-              
-              <div style={{ display: 'flex', gap: '12px', marginTop: '32px' }}>
-                <button type="button" className="btn-secondary" style={{ flex: 1 }} onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn-primary" style={{ flex: 1 }}>Solicitar Cita</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* CUSTOM ALERT MODAL */}
-      {alertModal.isOpen && (
-        <div className="overlay open" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 130 }}>
-          <div className="card" style={{ width: '100%', maxWidth: '320px', margin: '0 20px', textAlign: 'center', animation: 'fadeUp 0.3s forwards', borderTop: alertModal.type === 'success' ? '4px solid #4caf50' : '4px solid #ba1a1a' }}>
-            <div style={{ marginBottom: '16px' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '36px', color: alertModal.type === 'success' ? '#388e3c' : '#ba1a1a' }}>
-                {alertModal.type === 'success' ? 'check_circle' : 'error'}
-              </span>
-            </div>
-            <h3 className="font-display" style={{ fontSize: '18px', color: 'var(--deep)', marginBottom: '12px' }}>
-              {alertModal.type === 'success' ? '¡Éxito!' : 'Atención'}
-            </h3>
-            <p style={{ fontSize: '13px', color: 'var(--smoke)', marginBottom: '24px', lineHeight: 1.5 }}>{alertModal.message}</p>
-            <button className="btn-primary" style={{ width: '100%' }} onClick={() => setAlertModal({ isOpen: false, message: '', type: 'error' })}>Entendido</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

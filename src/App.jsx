@@ -12,8 +12,8 @@ import ServicesAndAppointments from './pages/ServicesAndAppointments';
 import Contact from './pages/Contact';
 
 // Admin Pages
+import Dashboard from './pages/admin/Dashboard';
 import Users from './pages/admin/Users';
-import Appointments from './pages/admin/Appointments';
 import Settings from './pages/admin/Settings';
 import Services from './pages/admin/Services';
 import Loyalty from './pages/admin/Loyalty';
@@ -26,7 +26,7 @@ const ProtectedRoute = ({ children, requiredRole, Layout, allowChangePassword })
     return <Navigate to="/change-password" />;
   }
   if (requiredRole && user.role !== requiredRole) {
-    return <Navigate to={user.role === 'admin' ? '/admin/appointments' : '/home'} />;
+    return <Navigate to={user.role === 'admin' ? '/admin/dashboard' : '/home'} />;
   }
   
   return Layout ? <Layout>{children}</Layout> : children;
@@ -46,13 +46,12 @@ const AppRoutes = () => {
       {/* User Routes */}
       <Route path="/home" element={<UserLayout><Home /></UserLayout>} />
       <Route path="/services" element={<UserLayout><ServicesAndAppointments /></UserLayout>} />
-      <Route path="/appointments" element={<UserLayout><ServicesAndAppointments /></UserLayout>} />
       <Route path="/contact" element={<UserLayout><Contact /></UserLayout>} />
       
       {/* Admin Routes */}
-      <Route path="/admin" element={<Navigate to="/admin/appointments" />} />
+      <Route path="/admin" element={<Navigate to="/admin/dashboard" />} />
+      <Route path="/admin/dashboard" element={<ProtectedRoute requiredRole="admin" Layout={AdminLayout}><Dashboard /></ProtectedRoute>} />
       <Route path="/admin/users" element={<ProtectedRoute requiredRole="admin" Layout={AdminLayout}><Users /></ProtectedRoute>} />
-      <Route path="/admin/appointments" element={<ProtectedRoute requiredRole="admin" Layout={AdminLayout}><Appointments /></ProtectedRoute>} />
       <Route path="/admin/settings" element={<ProtectedRoute requiredRole="admin" Layout={AdminLayout}><Settings /></ProtectedRoute>} />
       <Route path="/admin/services" element={<ProtectedRoute requiredRole="admin" Layout={AdminLayout}><Services /></ProtectedRoute>} />
       <Route path="/admin/loyalty" element={<ProtectedRoute requiredRole="admin" Layout={AdminLayout}><Loyalty /></ProtectedRoute>} />

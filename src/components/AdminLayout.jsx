@@ -17,7 +17,6 @@ export const AdminLayout = ({ children }) => {
     { path: '/admin', label: 'Panel Control', icon: 'dashboard' },
     { path: '/admin/users', label: 'Usuarios', icon: 'group' },
     { path: '/admin/services', label: 'Servicios', icon: 'content_cut' },
-    { path: '/admin/appointments', label: 'Agenda', icon: 'calendar_month' },
     { path: '/admin/loyalty', label: 'Fidelidad', icon: 'card_membership' },
   ];
 
@@ -42,7 +41,7 @@ export const AdminLayout = ({ children }) => {
         <nav className="flex flex-col flex-grow py-6 gap-2 overflow-y-auto">
           {navItems.map((item) => {
             const isActive = item.path === '/admin' 
-              ? location.pathname === '/admin' || location.pathname === '/admin/appointments' 
+              ? location.pathname === '/admin' || location.pathname === '/admin/dashboard' 
               : location.pathname.startsWith(item.path);
             return (
               <Link 

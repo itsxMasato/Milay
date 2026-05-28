@@ -3,8 +3,8 @@ import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 export default function Contact() {
-  const [whatsappLink, setWhatsappLink] = useState('https://wa.me/50499999999');
-  const [instagramLink, setInstagramLink] = useState('@milay_beauty');
+  const [whatsappLink, setWhatsappLink] = useState('');
+  const [instagramLink, setInstagramLink] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,9 +40,9 @@ export default function Contact() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* WhatsApp Card */}
         <a 
-          href={whatsappLink} 
-          target="_blank" 
-          rel="noopener noreferrer"
+          href={whatsappLink || undefined} 
+          target={whatsappLink ? '_blank' : undefined} 
+          rel={whatsappLink ? 'noopener noreferrer' : undefined}
           className="group relative bg-surface-container-lowest rounded-2xl p-10 flex flex-col items-center justify-center text-center shadow-sm border border-outline-variant/30 hover:shadow-xl hover:border-primary/50 transition-all duration-500 overflow-hidden"
         >
           <div className="absolute inset-0 bg-primary/5 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
@@ -58,9 +58,9 @@ export default function Contact() {
 
         {/* Instagram Card */}
         <a 
-          href={instagramLink.startsWith('http') ? instagramLink : `https://instagram.com/${instagramLink.replace('@', '')}`} 
-          target="_blank" 
-          rel="noopener noreferrer"
+          href={instagramLink ? (instagramLink.startsWith('http') ? instagramLink : `https://instagram.com/${instagramLink.replace('@', '')}`) : undefined} 
+          target={instagramLink ? '_blank' : undefined} 
+          rel={instagramLink ? 'noopener noreferrer' : undefined}
           className="group relative bg-surface-container-lowest rounded-2xl p-10 flex flex-col items-center justify-center text-center shadow-sm border border-outline-variant/30 hover:shadow-xl hover:border-tertiary/50 transition-all duration-500 overflow-hidden"
         >
           <div className="absolute inset-0 bg-tertiary/5 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
