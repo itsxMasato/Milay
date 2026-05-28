@@ -19,8 +19,9 @@ import Services from './pages/admin/Services';
 import Loyalty from './pages/admin/Loyalty';
 
 const ProtectedRoute = ({ children, requiredRole, Layout, allowChangePassword }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   
+  if (loading) return <div style={{ padding: '32px' }}>Cargando Milay...</div>;
   if (!user) return <Navigate to="/login" />;
   if (user.requirePasswordChange && !allowChangePassword) {
     return <Navigate to="/change-password" />;
