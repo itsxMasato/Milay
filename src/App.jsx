@@ -10,6 +10,7 @@ import ChangePassword from './pages/ChangePassword';
 import Home from './pages/Home';
 import ServicesAndAppointments from './pages/ServicesAndAppointments';
 import Contact from './pages/Contact';
+import MyCard from './pages/MyCard';
 
 // Admin Pages
 import Dashboard from './pages/admin/Dashboard';
@@ -48,6 +49,7 @@ const AppRoutes = () => {
       <Route path="/home" element={<UserLayout><Home /></UserLayout>} />
       <Route path="/services" element={<UserLayout><ServicesAndAppointments /></UserLayout>} />
       <Route path="/contact" element={<UserLayout><Contact /></UserLayout>} />
+      <Route path="/my-card" element={<UserLayout><MyCard /></UserLayout>} />
       
       {/* Admin Routes */}
       <Route path="/admin" element={<Navigate to="/admin/dashboard" />} />

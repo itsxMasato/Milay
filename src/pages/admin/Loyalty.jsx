@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 
 function generateCode() {
   return 'MB-' + Math.floor(1000 + Math.random() * 9000);
@@ -90,7 +90,7 @@ export default function Loyalty() {
       bday: clientForm.bday,
       code: clientForm.code.trim() || generateCode(),
       sellos: Number(clientForm.sellos) || 0,
-      updatedAt: new Date(),
+      updatedAt: serverTimestamp(),
     };
 
     try {
@@ -124,16 +124,13 @@ export default function Loyalty() {
   const markSello = async (client) => {
     const currentSellos = Number(client.sellos) || 0;
     const newSellos = currentSellos + 1;
-    
-    const updated = {
-      ...client,
-      sellos: newSellos,
-      updatedAt: new Date(),
-    };
 
     try {
-      await updateDoc(doc(db, 'loyaltyClients', client.id), updated);
-      setClients((prev) => prev.map((item) => (item.id === client.id ? updated : item)));
+      await updateDoc(doc(db, 'loyaltyClients', client.id), {
+        sellos: newSellos,
+        updatedAt: serverTimestamp(),
+      });
+      setClients((prev) => prev.map((item) => (item.id === client.id ? { ...item, sellos: newSellos } : item)));
       
       // Si llegó a 10, mostrar opción de reiniciar
       if (newSellos === 10) {
@@ -148,15 +145,12 @@ export default function Loyalty() {
     const currentSellos = Number(client.sellos) || 0;
     if (currentSellos <= 0) return;
 
-    const updated = {
-      ...client,
-      sellos: currentSellos - 1,
-      updatedAt: new Date(),
-    };
-
     try {
-      await updateDoc(doc(db, 'loyaltyClients', client.id), updated);
-      setClients((prev) => prev.map((item) => (item.id === client.id ? updated : item)));
+      await updateDoc(doc(db, 'loyaltyClients', client.id), {
+        sellos: currentSellos - 1,
+        updatedAt: serverTimestamp(),
+      });
+      setClients((prev) => prev.map((item) => (item.id === client.id ? { ...item, sellos: currentSellos - 1 } : item)));
     } catch (error) {
       console.error('Error disminuyendo sello:', error);
     }
@@ -166,15 +160,12 @@ export default function Loyalty() {
     const client = clients.find((c) => c.id === clientId);
     if (!client) return;
 
-    const updated = {
-      ...client,
-      sellos: 0,
-      updatedAt: new Date(),
-    };
-
     try {
-      await updateDoc(doc(db, 'loyaltyClients', clientId), updated);
-      setClients((prev) => prev.map((item) => (item.id === clientId ? updated : item)));
+      await updateDoc(doc(db, 'loyaltyClients', clientId), {
+        sellos: 0,
+        updatedAt: serverTimestamp(),
+      });
+      setClients((prev) => prev.map((item) => (item.id === clientId ? { ...item, sellos: 0 } : item)));
       setSelloAction({ isOpen: false, clientId: null, action: '' });
     } catch (error) {
       console.error('Error reiniciando tarjeta:', error);
