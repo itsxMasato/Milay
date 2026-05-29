@@ -23,6 +23,10 @@ const defaultPageData = {
   loyaltyDescription: '',
   socialInstagram: '',
   socialWhatsapp: '',
+  footerHours: '',
+  footerPhone: '',
+  footerEmail: '',
+  footerAddress: '',
   footerText: '',
 };
 
@@ -414,9 +418,36 @@ export default function Home() {
       </div>
 
       <footer>
-        <span className="footer-logo">{pageData.brandName}</span>
-        <p>"{pageData.aboutQuote}"</p>
-        <p style={{ marginTop: '0.5rem' }}>{pageData.footerText}</p>
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <span className="footer-logo">{pageData.brandName}</span>
+            {pageData.aboutQuote && <p className="footer-quote">"{pageData.aboutQuote}"</p>}
+            {pageData.footerText && <p className="footer-copy">{pageData.footerText}</p>}
+          </div>
+
+          <div className="footer-info">
+            {pageData.footerHours && (
+              <div className="footer-section">
+                <h4>Horario de atención</h4>
+                <p>{pageData.footerHours}</p>
+              </div>
+            )}
+            {(pageData.footerPhone || pageData.footerEmail || pageData.socialWhatsapp) && (
+              <div className="footer-section">
+                <h4>Contacto</h4>
+                {pageData.footerPhone && <p>Tel: {pageData.footerPhone}</p>}
+                {pageData.footerEmail && <p>Email: {pageData.footerEmail}</p>}
+                {pageData.socialWhatsapp && <p>WhatsApp: {pageData.socialWhatsapp}</p>}
+              </div>
+            )}
+            {pageData.footerAddress && (
+              <div className="footer-section">
+                <h4>Ubicación</h4>
+                <p>{pageData.footerAddress}</p>
+              </div>
+            )}
+          </div>
+        </div>
       </footer>
     </>
   );

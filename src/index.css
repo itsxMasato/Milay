@@ -1103,7 +1103,16 @@ section {
 footer {
   background: var(--charcoal);
   padding: 3rem 4rem;
-  text-align: center;
+  text-align: left;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
 }
 
 footer .footer-logo {
@@ -1112,15 +1121,64 @@ footer .footer-logo {
   font-weight: 300;
   letter-spacing: 0.2em;
   color: var(--cream);
-  opacity: 0.8;
+  opacity: 0.95;
   margin-bottom: 1rem;
   display: block;
 }
 
-footer p {
-  font-size: 0.75rem;
-  color: rgba(250,247,244,0.3);
-  letter-spacing: 0.1em;
+.footer-brand p,
+.footer-section p {
+  font-size: 0.95rem;
+  color: rgba(250,247,244,0.75);
+  line-height: 1.9;
+  margin: 0;
+}
+
+.footer-quote {
+  margin-top: 0.75rem;
+  color: rgba(250,247,244,0.45);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.footer-copy {
+  margin-top: 1rem;
+  color: rgba(250,247,244,0.48);
+}
+
+.footer-info {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.footer-section h4 {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+
+.footer-section p {
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  footer {
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .footer-info {
+    grid-template-columns: 1fr;
+  }
+  .footer-section {
+    text-align: center;
+  }
 }
 
 .ornament {

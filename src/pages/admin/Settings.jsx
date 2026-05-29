@@ -19,6 +19,10 @@ const defaultPageData = {
   loyaltyDescription: '',
   socialInstagram: '',
   socialWhatsapp: '',
+  footerHours: '',
+  footerPhone: '',
+  footerEmail: '',
+  footerAddress: '',
   footerText: '',
 };
 
@@ -162,6 +166,22 @@ export default function Settings() {
             <div className="field">
               <label>WhatsApp</label>
               <input value={data.socialWhatsapp} onChange={(e) => handleFieldChange('socialWhatsapp', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Horario de atención</label>
+              <input value={data.footerHours} onChange={(e) => handleFieldChange('footerHours', e.target.value)} placeholder="Lun-Vie 9:00 - 18:00" />
+            </div>
+            <div className="field">
+              <label>Teléfono</label>
+              <input value={data.footerPhone} onChange={(e) => handleFieldChange('footerPhone', e.target.value)} placeholder="+504 9999-9999" />
+            </div>
+            <div className="field">
+              <label>Correo electrónico</label>
+              <input value={data.footerEmail} onChange={(e) => handleFieldChange('footerEmail', e.target.value)} placeholder="hola@milaybeauty.com" />
+            </div>
+            <div className="field md:col-span-2">
+              <label>Dirección</label>
+              <textarea rows="2" value={data.footerAddress} onChange={(e) => handleFieldChange('footerAddress', e.target.value)} placeholder="Colonia XYZ, Tegucigalpa" />
             </div>
             <div className="field md:col-span-2">
               <label>Texto de pie de página</label>
