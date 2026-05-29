@@ -205,12 +205,21 @@ export default function Home() {
             <li><a href="#servicios">Servicios</a></li>
             <li><a href="#nosotras">Nosotras</a></li>
             <li><a href="#fidelidad">Tarjeta Fidelidad</a></li>
+            {!user && (
+              <li className="nav-link login-link">
+                <Link to="/login" className="btn btn-primary">
+                  Login
+                </Link>
+              </li>
+            )}
+            {user?.role === 'admin' && (
+              <li className="nav-link login-link">
+                <Link to="/admin" className="btn btn-primary">
+                  Panel admin
+                </Link>
+              </li>
+            )}
           </ul>
-          {!user && (
-            <Link to="/login" className="btn btn-primary">
-              Login
-            </Link>
-          )}
         </div>
       </nav>
 
