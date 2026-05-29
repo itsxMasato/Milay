@@ -504,12 +504,18 @@ nav {
   list-style: none;
 }
 
-  .nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 1.75rem;
-  }
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
 
+.nav-links a {
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--primary);
+  text-decoration: none;
   transition: color 0.3s;
 }
 
@@ -1143,10 +1149,15 @@ footer p {
 .hero-content > *:nth-child(4) { animation-delay: 0.7s; }
 
 @media (max-width: 768px) {
-  nav { padding: 1rem 1.5rem; }
+  nav {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
   .nav-actions {
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
     gap: 1rem;
   }
@@ -1155,11 +1166,13 @@ footer p {
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 0;
     width: 100%;
   }
   .nav-actions > .btn {
     width: auto;
+    order: 2;
+    align-self: center;
   }
   section { padding: 4rem 1.5rem; }
   #servicios { padding-top: 5rem; }
