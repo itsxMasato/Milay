@@ -196,7 +196,7 @@ export default function Home() {
     <>
       <nav>
         <a href="#inicio" className="nav-logo">{pageData.brandName}</a>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
+        <div className="nav-actions">
           <ul className="nav-links">
             <li><a href="#servicios">Servicios</a></li>
             <li><a href="#nosotras">Nosotras</a></li>

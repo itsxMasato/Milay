@@ -391,7 +391,7 @@ body {
 .sidebar {
   width: 240px; height: 100vh; position: fixed; left: -240px; top: 0;
   background: var(--warm-white); border-right: 1px solid var(--mist);
-  display: flex; flexDirection: column; z-index: 100;
+  display: flex; flex-direction: column; z-index: 100;
   transition: left 0.4s cubic-bezier(0.16,1,0.3,1);
 }
 .sidebar.open { left: 0; }
@@ -504,12 +504,12 @@ nav {
   list-style: none;
 }
 
-.nav-links a {
-  font-size: 0.78rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--primary);
-  text-decoration: none;
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+  }
+
   transition: color 0.3s;
 }
 
@@ -1144,12 +1144,22 @@ footer p {
 
 @media (max-width: 768px) {
   nav { padding: 1rem 1.5rem; }
+  .nav-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+  }
   .nav-links {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
     margin-top: 1rem;
+    width: 100%;
+  }
+  .nav-actions > .btn {
+    width: auto;
   }
   section { padding: 4rem 1.5rem; }
   #servicios { padding-top: 5rem; }
