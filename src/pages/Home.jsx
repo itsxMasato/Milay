@@ -211,7 +211,7 @@ export default function Home() {
 
   return (
     <>
-      <nav>
+      <nav className="home-nav">
         <a href="#inicio" className="nav-logo">{pageData.brandName}</a>
         <div className="nav-actions">
           <ul className="nav-links">
